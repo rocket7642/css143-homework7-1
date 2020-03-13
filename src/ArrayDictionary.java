@@ -57,7 +57,22 @@ public class ArrayDictionary implements Dictionary {
     // Return true if an entry is deleted, false otherwise
     @Override
     public boolean remove(int key) {
-        // homework
+        if(this.contains(key) == true){
+            for(KVEntry e : entries){
+                if(e.key == key){
+                    e = null;
+                    return true;
+                }
+                else if(e.next != null){
+                    check temp = check(e,key);
+                    if(temp.done == true){
+                        temp.next = null;
+                        temp.current.next = null;
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
     }
 
@@ -65,8 +80,32 @@ public class ArrayDictionary implements Dictionary {
     // with the key
     @Override
     public boolean contains(int key) {
-        // homework
+        if(capacity == 0){
+            return false;
+        }
+        for(KVEntry e : entries){
+            if(e != null && e.key == key){
+                return true;
+            }
+            else if(e != null && e.next != null){
+                if(check(e,key).done == true){
+                    return true;
+                }
+            }
+        }
         return false;
+    }
+
+    public check check(KVEntry e, int key){
+        if(e.next.key == key){
+            return new check(true,e,e.next);
+        }
+        else if(e.next.next != null){
+            return check(e.next, key);
+        }
+        else{
+            return new check(false,e,null);
+        }
     }
 
     // Return the entry value with the given key
